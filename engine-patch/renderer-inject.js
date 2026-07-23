@@ -134,6 +134,7 @@
   if (previous?.scheduler?.timeout) clearTimeout(previous.scheduler.timeout);
   if (previous?.artUrl) URL.revokeObjectURL(previous.artUrl);
   if (previous?.homeArtUrl) URL.revokeObjectURL(previous.homeArtUrl);
+  if (previous?.petUrl) URL.revokeObjectURL(previous.petUrl);
   if (previous?.petKeyHandler) document.removeEventListener("keydown", previous.petKeyHandler, true);
   const artUrl = (() => {
     const comma = artDataUrl.indexOf(",");
@@ -151,6 +152,14 @@
     const mime = /^data:([^;,]+)/.exec(homeArtDataUrl)?.[1] || "image/png";
     return URL.createObjectURL(new Blob([bytes], { type: mime }));
   })() : artUrl;
+  const petUrl = petDataUrl ? (() => {
+    const comma = petDataUrl.indexOf(",");
+    const binary = atob(petDataUrl.slice(comma + 1));
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+    const mime = /^data:([^;,]+)/.exec(petDataUrl)?.[1] || "image/png";
+    return URL.createObjectURL(new Blob([bytes], { type: mime }));
+  })() : null;
   const config = normalizeConfig(rawConfig);
   let profile = {
     ...defaultProfile,
@@ -444,13 +453,13 @@
     }
     chrome.classList.toggle("dream-home-shell", Boolean(home));
     let pet = chrome.querySelector(".dream-government-pet");
-    if (petDataUrl) {
+    if (petUrl) {
       if (!pet) {
         pet = document.createElement("div");
         pet.className = "dream-government-pet";
         chrome.appendChild(pet);
       }
-      pet.style.setProperty("--dream-pet", `url("${petDataUrl}")`);
+      pet.style.setProperty("--dream-pet", `url("${petUrl}")`);
       setPetFrame(pet, PET_ROWS.idle[0], 0);
       pet.onclick = () => playPet(pet, ["waving", "working", "jumping", "review"]);
     } else {
@@ -468,6 +477,7 @@
     if (state?.scheduler?.timeout) clearTimeout(state.scheduler.timeout);
     if (state?.artUrl) URL.revokeObjectURL(state.artUrl);
     if (state?.homeArtUrl) URL.revokeObjectURL(state.homeArtUrl);
+    if (state?.petUrl) URL.revokeObjectURL(state.petUrl);
     if (state?.petKeyHandler) document.removeEventListener("keydown", state.petKeyHandler, true);
     delete window[STATE_KEY];
     return true;
@@ -493,7 +503,7 @@
   });
   const timer = setInterval(ensure, 5000);
   window[STATE_KEY] = {
-    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, profile, config, installToken, petKeyHandler, version: "1.3.0",
+    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, petUrl, profile, config, installToken, petKeyHandler, version: "1.3.1",
   };
   ensure();
   analyzeArt().then((result) => {
@@ -503,5 +513,5 @@
     state.profile = result;
     ensure();
   });
-  return { installed: true, version: "1.3.0", adaptive: true };
+  return { installed: true, version: "1.3.1", adaptive: true };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_HOME_ART_JSON__, __DREAM_PET_JSON__, __DREAM_THEME_JSON__)
