@@ -1,0 +1,10 @@
+# Local Dream Skin runtime state and backups must never be published.
+state.json
+backups/
+logs/
+*.log
+
+# Windows / editor artifacts
+Thumbs.db
+Desktop.ini
+.vscode/

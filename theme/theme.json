@@ -1,0 +1,24 @@
+{
+    "schemaVersion":  1,
+    "id":  "20260718-153610-25b3b6df",
+    "brandSubtitle":  "政务智能协同",
+    "tagline":  "智慧办公，协同高效",
+    "projectPrefix":  "选择项目 · ",
+    "projectLabel":  "◉  选择项目",
+    "statusText":  "GOVERNMENT WORKBENCH",
+    "quote":  "SERVICE · COLLABORATION · EFFICIENCY",
+    "appearance":  "light",
+    "art":  {
+                "focusX":  0.65,
+                "focusY":  0.42,
+                "safeArea":  "center",
+                "taskMode":  "ambient"
+            },
+    "palette":  {
+
+                },
+    "name":  "Codex 政务工作台",
+    "image":  "art-20260718-214536-671-77f8ae34.png",
+    "homeImage": "new-task-dashboard-compact.png",
+    "pet": "govassistant-spritesheet.webp"
+}
