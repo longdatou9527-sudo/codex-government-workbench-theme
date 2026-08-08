@@ -7,7 +7,7 @@ import { readImageMetadata } from "./image-metadata.mjs";
 const scriptPath = fileURLToPath(import.meta.url);
 const here = path.dirname(scriptPath);
 const root = path.resolve(here, "..");
-const SKIN_VERSION = "1.3.2";
+const SKIN_VERSION = "1.3.3";
 const MAX_ART_BYTES = 16 * 1024 * 1024;
 const STRONG_THEME_AUDIT_MS = 30000;
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]", "::1"]);
@@ -497,7 +497,7 @@ async function probeSession(session) {
       // class. Keep the older selector and accept the semantic module name.
       shell: Boolean(document.querySelector('main.main-surface, main[class*="MainContentSurface"]')),
       sidebar: Boolean(document.querySelector('aside.app-shell-left-panel')),
-      composer: Boolean(document.querySelector('.composer-surface-chrome')),
+      composer: Boolean(document.querySelector('.composer-surface-chrome, [contenteditable="true"][aria-label]')),
       main: Boolean(document.querySelector('[role="main"]')),
     };
     return {
@@ -667,7 +667,7 @@ async function verifySession(session) {
       suggestionsPresent: Boolean(suggestions),
       hero: box(home?.firstElementChild?.firstElementChild?.firstElementChild),
       cards,
-      composer: box(document.querySelector('.composer-surface-chrome')),
+      composer: box(document.querySelector('.composer-surface-chrome, [contenteditable="true"][aria-label]')),
       sidebar: box(document.querySelector('aside.app-shell-left-panel')),
       viewport: { width: innerWidth, height: innerHeight },
       documentOverflow: {
@@ -675,9 +675,12 @@ async function verifySession(session) {
         y: document.documentElement.scrollHeight > document.documentElement.clientHeight,
       },
     };
+    // Codex 26.803 can render the home suggestions before a composer exists.
+    // That is a valid themed page and must not make the startup watcher exit.
+    const validInteractionSurface = Boolean(result.composer) || result.homePresent;
     result.pass = result.installed && result.version === result.expectedVersion &&
       result.stylePresent && result.chromePresent &&
-      result.chromePointerEvents === 'none' && Boolean(result.composer) && Boolean(result.sidebar) &&
+      result.chromePointerEvents === 'none' && validInteractionSurface && Boolean(result.sidebar) &&
       (!result.homePresent || (Boolean(result.hero) &&
         (!result.suggestionsPresent || (result.cards.length >= 2 && result.cards.length <= 4))));
     return result;

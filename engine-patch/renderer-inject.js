@@ -506,7 +506,7 @@
   });
   const timer = setInterval(ensure, 5000);
   window[STATE_KEY] = {
-    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, petUrl, profile, config, installToken, petKeyHandler, version: "1.3.2",
+    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, petUrl, profile, config, installToken, petKeyHandler, version: "1.3.3",
   };
   ensure();
   analyzeArt().then((result) => {
@@ -516,5 +516,5 @@
     state.profile = result;
     ensure();
   });
-  return { installed: true, version: "1.3.2", adaptive: true };
+  return { installed: true, version: "1.3.3", adaptive: true };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_HOME_ART_JSON__, __DREAM_PET_JSON__, __DREAM_THEME_JSON__)
