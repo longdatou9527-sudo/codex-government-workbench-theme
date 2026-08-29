@@ -16,7 +16,7 @@ $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $backupRoot = Join-Path $skinRoot "backups\government-workbench-$stamp"
 New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
 
-foreach ($item in @('assets\renderer-inject.js', 'assets\dream-skin.css', 'scripts\injector.mjs', 'scripts\common-windows.ps1')) {
+foreach ($item in @('assets\renderer-inject.js', 'assets\dream-skin.css', 'scripts\injector.mjs', 'scripts\image-metadata.mjs', 'scripts\common-windows.ps1')) {
   $target = Join-Path $engineRoot $item
   if (Test-Path -LiteralPath $target -PathType Leaf) {
     $backup = Join-Path $backupRoot ($item -replace '\\', '_')
@@ -32,6 +32,7 @@ if (Test-Path -LiteralPath $activeTheme) {
 Copy-Item -LiteralPath (Join-Path $patchSource 'renderer-inject.js') -Destination (Join-Path $engineRoot 'assets\renderer-inject.js') -Force
 Copy-Item -LiteralPath (Join-Path $patchSource 'dream-skin.css') -Destination (Join-Path $engineRoot 'assets\dream-skin.css') -Force
 Copy-Item -LiteralPath (Join-Path $patchSource 'injector.mjs') -Destination (Join-Path $engineRoot 'scripts\injector.mjs') -Force
+Copy-Item -LiteralPath (Join-Path $patchSource 'image-metadata.mjs') -Destination (Join-Path $engineRoot 'scripts\image-metadata.mjs') -Force
 Copy-Item -LiteralPath (Join-Path $patchSource 'common-windows.ps1') -Destination (Join-Path $engineRoot 'scripts\common-windows.ps1') -Force
 
 New-Item -ItemType Directory -Force -Path $activeTheme | Out-Null

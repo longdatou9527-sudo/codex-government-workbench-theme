@@ -7,7 +7,7 @@ import { readImageMetadata } from "./image-metadata.mjs";
 const scriptPath = fileURLToPath(import.meta.url);
 const here = path.dirname(scriptPath);
 const root = path.resolve(here, "..");
-const SKIN_VERSION = "1.3.3";
+const SKIN_VERSION = "1.3.6";
 const MAX_ART_BYTES = 16 * 1024 * 1024;
 const STRONG_THEME_AUDIT_MS = 30000;
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]", "::1"]);
@@ -492,11 +492,15 @@ async function readThemeSourceStamp(loadedTheme) {
 
 async function probeSession(session) {
   return session.evaluate(`(() => {
+    // Codex app-shell class names have changed again in recent desktop builds.
+    // Prefer historical selectors, then fall back to semantic landmarks.
+    const shellNode = document.querySelector('main.main-surface, main[class*="MainContentSurface"], main, [role="main"]');
+    const sidebarNode = document.querySelector('aside.app-shell-left-panel, aside, nav[aria-label], [role="navigation"]');
     const markers = {
       // Codex 26.727 moved the stable main-surface class to a CSS-module
       // class. Keep the older selector and accept the semantic module name.
-      shell: Boolean(document.querySelector('main.main-surface, main[class*="MainContentSurface"]')),
-      sidebar: Boolean(document.querySelector('aside.app-shell-left-panel')),
+      shell: Boolean(shellNode),
+      sidebar: Boolean(sidebarNode),
       composer: Boolean(document.querySelector('.composer-surface-chrome, [contenteditable="true"][aria-label]')),
       main: Boolean(document.querySelector('[role="main"]')),
     };
@@ -578,8 +582,8 @@ export function earlyPayloadFor(payload, revision) {
       if (window[generationKey] !== generation) { stop(); return true; }
       const root = document.documentElement;
       if (!root || !document.body) return false;
-      const shell = document.querySelector('main.main-surface, main[class*="MainContentSurface"]');
-      const sidebar = document.querySelector('aside.app-shell-left-panel');
+      const shell = document.querySelector('main.main-surface, main[class*="MainContentSurface"], main, [role="main"]');
+      const sidebar = document.querySelector('aside.app-shell-left-panel, aside, nav[aria-label], [role="navigation"]');
       if (!shell || !sidebar) return false;
       stop();
       ${payload};
@@ -668,7 +672,7 @@ async function verifySession(session) {
       hero: box(home?.firstElementChild?.firstElementChild?.firstElementChild),
       cards,
       composer: box(document.querySelector('.composer-surface-chrome, [contenteditable="true"][aria-label]')),
-      sidebar: box(document.querySelector('aside.app-shell-left-panel')),
+      sidebar: box(document.querySelector('aside.app-shell-left-panel, aside, nav[aria-label], [role="navigation"]')),
       viewport: { width: innerWidth, height: innerHeight },
       documentOverflow: {
         x: document.documentElement.scrollWidth > document.documentElement.clientWidth,

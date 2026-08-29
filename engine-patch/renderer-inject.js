@@ -390,8 +390,9 @@
     const root = document.documentElement;
     if (!root || !document.body) return;
 
-    const shellMain = document.querySelector("main.main-surface, main[class*=\"MainContentSurface\"]");
-    const shellSidebar = document.querySelector("aside.app-shell-left-panel");
+    // Keep attachment stable even if Codex renames implementation classes.
+    const shellMain = document.querySelector("main.main-surface, main[class*='MainContentSurface'], main, [role='main']");
+    const shellSidebar = document.querySelector("aside.app-shell-left-panel, aside, nav[aria-label], [role='navigation']");
     if (!shellMain || !shellSidebar) {
       clearSkinDom();
       return;
@@ -429,7 +430,7 @@
     }
     for (const candidate of utilityBars) candidate.classList.add(HOME_UTILITY_CLASS);
     shellMain.classList.toggle("dream-home-shell", Boolean(home));
-    const sidebar = document.querySelector("aside.app-shell-left-panel");
+    const sidebar = shellSidebar;
     const sidebarWidth = Math.round(sidebar?.getBoundingClientRect().width || 300);
     root.style.setProperty("--dream-sidebar-width", `${sidebarWidth}px`);
 
@@ -506,7 +507,7 @@
   });
   const timer = setInterval(ensure, 5000);
   window[STATE_KEY] = {
-    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, petUrl, profile, config, installToken, petKeyHandler, version: "1.3.3",
+    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, petUrl, profile, config, installToken, petKeyHandler, version: "1.3.6",
   };
   ensure();
   analyzeArt().then((result) => {
@@ -516,5 +517,5 @@
     state.profile = result;
     ensure();
   });
-  return { installed: true, version: "1.3.3", adaptive: true };
+  return { installed: true, version: "1.3.6", adaptive: true };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_HOME_ART_JSON__, __DREAM_PET_JSON__, __DREAM_THEME_JSON__)
