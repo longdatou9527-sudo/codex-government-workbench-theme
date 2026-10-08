@@ -37,12 +37,13 @@ Copy-Item -LiteralPath (Join-Path $patchSource 'common-windows.ps1') -Destinatio
 
 New-Item -ItemType Directory -Force -Path $activeTheme | Out-Null
 Get-ChildItem -LiteralPath $activeTheme -Force | Remove-Item -Force -Recurse
-Copy-Item -LiteralPath (Join-Path $themeSource '*') -Destination $activeTheme -Recurse -Force
+Get-ChildItem -LiteralPath $themeSource | Copy-Item -Destination $activeTheme -Recurse -Force
 
 $savedTheme = Join-Path $skinRoot 'themes\codex-government-workbench'
 New-Item -ItemType Directory -Force -Path $savedTheme | Out-Null
 Get-ChildItem -LiteralPath $savedTheme -Force | Remove-Item -Force -Recurse
-Copy-Item -LiteralPath (Join-Path $themeSource '*') -Destination $savedTheme -Recurse -Force
+Get-ChildItem -LiteralPath $themeSource | Copy-Item -Destination $savedTheme -Recurse -Force
 
 & (Join-Path $engineRoot 'scripts\start-dream-skin.ps1') -RestartExisting
 Write-Host "政务工作台主题已导入并启用。原文件备份在：$backupRoot"
+

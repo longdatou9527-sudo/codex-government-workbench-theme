@@ -168,7 +168,7 @@
   const existingStyle = document.getElementById(STYLE_ID);
   if (existingStyle) {
     existingStyle.textContent = cssText;
-    existingStyle.dataset.dreamVersion = "11";
+    existingStyle.dataset.dreamVersion = "12";
   }
 
   const analyzeArt = () => new Promise((resolve) => {
@@ -390,8 +390,8 @@
     const root = document.documentElement;
     if (!root || !document.body) return;
 
-    // Keep attachment stable even if Codex renames implementation classes.
-    const shellMain = document.querySelector("main.main-surface, main[class*='MainContentSurface'], main, [role='main']");
+    // Landmark fallbacks make the attachment resilient to renamed CSS classes.
+    const shellMain = [...document.querySelectorAll("main.main-surface, main[class*='MainContentSurface'], main, [role='main']")].find(node => node.checkVisibility({checkVisibilityCSS: true}));
     const shellSidebar = document.querySelector("aside.app-shell-left-panel, aside, nav[aria-label], [role='navigation']");
     if (!shellMain || !shellSidebar) {
       clearSkinDom();
@@ -407,16 +407,21 @@
       style.id = STYLE_ID;
       (document.head || root).appendChild(style);
     }
-    if (style.dataset.dreamVersion !== "11") {
+    if (style.dataset.dreamVersion !== "12") {
       style.textContent = cssText;
-      style.dataset.dreamVersion = "11";
+      style.dataset.dreamVersion = "12";
     }
 
     // Keep the historical class as a compatibility alias for the theme's
     // CSS, while the custom class stays stable across Codex releases.
     shellMain.classList.add("dream-main-surface", "main-surface");
-    const mainRoots = [...document.querySelectorAll('[role="main"], main.dream-main-surface')];
-    const home = mainRoots.find((candidate) => candidate.querySelector('[data-testid="home-icon"]')) || null;
+    const mainRoots = [...document.querySelectorAll('[role="main"], main.dream-main-surface')].filter(node => node.checkVisibility({checkVisibilityCSS: true}));
+    const detectedHome = mainRoots.find((candidate) => candidate.querySelector('[data-testid="home-icon"]')) || null;
+    // Codex 26.803 replaced the original home composer layout.  Its nested
+    // geometry differs from the legacy workbench and must remain native;
+    // otherwise the legacy hero rules can push the composer out of view.
+    const supportsLegacyHomeLayout = Boolean(shellMain.querySelector('.composer-surface-chrome'));
+    const home = supportsLegacyHomeLayout ? detectedHome : null;
     for (const candidate of mainRoots) {
       candidate.classList.toggle("dream-home", candidate === home);
       candidate.classList.toggle("dream-task", candidate !== home);
@@ -431,11 +436,15 @@
     for (const candidate of utilityBars) candidate.classList.add(HOME_UTILITY_CLASS);
     shellMain.classList.toggle("dream-home-shell", Boolean(home));
     const sidebar = shellSidebar;
+    sidebar.style.setProperty("background", "linear-gradient(180deg, #bd332b 0%, #b42b24 55%, #a92520 100%)", "important");
     const sidebarWidth = Math.round(sidebar?.getBoundingClientRect().width || 300);
     root.style.setProperty("--dream-sidebar-width", `${sidebarWidth}px`);
 
     let dashboard = document.querySelector(".dream-government-dashboard");
-    if (home) {
+    // The fixed workbench image is compatible with both home layouts.  The
+    // legacy class above only controls the old DOM geometry; it must not
+    // decide whether the workbench artwork is visible on current Codex.
+    if (detectedHome && !mainRoots.some(node => node.querySelector('[data-thread-find-target="conversation"], .thread-scroll-container'))) {
       if (!dashboard || dashboard.parentElement !== document.body) {
         dashboard?.remove();
         dashboard = document.createElement("div");
@@ -507,7 +516,7 @@
   });
   const timer = setInterval(ensure, 5000);
   window[STATE_KEY] = {
-    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, petUrl, profile, config, installToken, petKeyHandler, version: "1.3.6",
+    ensure, cleanup, observer, timer, scheduler, artUrl, homeArtUrl, petUrl, profile, config, installToken, petKeyHandler, version: "1.3.7",
   };
   ensure();
   analyzeArt().then((result) => {
@@ -517,5 +526,5 @@
     state.profile = result;
     ensure();
   });
-  return { installed: true, version: "1.3.6", adaptive: true };
+  return { installed: true, version: "1.3.7", adaptive: true };
 })(__DREAM_CSS_JSON__, __DREAM_ART_JSON__, __DREAM_HOME_ART_JSON__, __DREAM_PET_JSON__, __DREAM_THEME_JSON__)

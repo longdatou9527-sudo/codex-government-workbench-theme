@@ -94,7 +94,7 @@ html.codex-dream-skin aside.app-shell-left-panel [class*="text-token"] {
   color: currentColor;
 }
 
-html.codex-dream-skin main.main-surface {
+html.codex-dream-skin main.dream-main-surface {
   position: relative;
   isolation: isolate;
   overflow: hidden !important;
@@ -104,7 +104,7 @@ html.codex-dream-skin main.main-surface {
   box-shadow: inset 0 1px color-mix(in oklab, var(--dream-surface-raised) 72%, transparent) !important;
 }
 
-html.codex-dream-skin main.main-surface > header.app-header-tint {
+html.codex-dream-skin main.dream-main-surface > header.app-header-tint {
   /* Preserve Codex's native fixed header geometry and side-panel controls. */
   color: var(--dream-text) !important;
   background: color-mix(in oklab, var(--dream-surface) 94%, transparent) !important;
@@ -279,7 +279,7 @@ html.codex-dream-skin .dream-home::after {
 
 html.codex-dream-skin .dream-government-dashboard {
   position: fixed;
-  z-index: 0;
+  z-index: 2;
   top: 64px;
   left: calc(var(--dream-sidebar-width) + ((100vw - var(--dream-sidebar-width)) / 2));
   width: auto;
@@ -503,8 +503,8 @@ html.codex-dream-skin article {
 /* A 16:9 or wider image is painted once on the native window. The sidebar,
    title bar and route surface become coordinated readability layers instead
    of repeating or cropping the image inside individual panels. */
-html.codex-dream-skin.dream-art-wide:has(main.main-surface.dream-home-shell) body,
-html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.main-surface:not(.dream-home-shell)) body {
+html.codex-dream-skin.dream-art-wide:has(main.dream-main-surface.dream-home-shell) body,
+html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.dream-main-surface:not(.dream-home-shell)) body {
   background-color: var(--dream-canvas) !important;
   background-image: var(--dream-art) !important;
   background-position: var(--dream-art-position) !important;
@@ -513,9 +513,9 @@ html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
   background-attachment: fixed !important;
 }
 
-html.codex-dream-skin.dream-art-wide:has(main.main-surface.dream-home-shell)
+html.codex-dream-skin.dream-art-wide:has(main.dream-main-surface.dream-home-shell)
   aside.app-shell-left-panel,
-html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.main-surface:not(.dream-home-shell))
+html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.dream-main-surface:not(.dream-home-shell))
   aside.app-shell-left-panel {
   background: linear-gradient(90deg,
     var(--dream-immersive-sidebar),
@@ -526,22 +526,22 @@ html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
   backdrop-filter: none !important;
 }
 
-html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.main-surface:not(.dream-home-shell))
+html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.dream-main-surface:not(.dream-home-shell))
   aside.app-shell-left-panel {
   background: linear-gradient(90deg,
     var(--dream-task-immersive-sidebar),
     var(--dream-task-immersive-edge)) !important;
 }
 
-html.codex-dream-skin.dream-art-wide:has(main.main-surface.dream-home-shell)
+html.codex-dream-skin.dream-art-wide:has(main.dream-main-surface.dream-home-shell)
   aside.app-shell-left-panel::after,
-html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.main-surface:not(.dream-home-shell))
+html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner):has(main.dream-main-surface:not(.dream-home-shell))
   aside.app-shell-left-panel::after {
   background: transparent !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface.dream-home-shell,
-html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner) main.main-surface:not(.dream-home-shell) {
+html.codex-dream-skin.dream-art-wide main.dream-main-surface.dream-home-shell,
+html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner) main.dream-main-surface:not(.dream-home-shell) {
   background: linear-gradient(90deg,
     var(--dream-immersive-edge),
     var(--dream-immersive-mid) 64%,
@@ -551,7 +551,7 @@ html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
   box-shadow: none !important;
 }
 
-html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner) main.main-surface:not(.dream-home-shell) {
+html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner) main.dream-main-surface:not(.dream-home-shell) {
   background: linear-gradient(90deg,
     var(--dream-task-immersive-edge),
     var(--dream-task-immersive-mid) 64%,
@@ -566,7 +566,7 @@ html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
   content: none !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface > header.app-header-tint {
+html.codex-dream-skin.dream-art-wide main.dream-main-surface > header.app-header-tint {
   background: transparent !important;
   border-bottom: 0 !important;
   box-shadow: none !important;
@@ -575,15 +575,15 @@ html.codex-dream-skin.dream-art-wide main.main-surface > header.app-header-tint 
     0 0 8px color-mix(in oklab, var(--dream-canvas) 58%, transparent) !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface > header.app-header-tint svg {
+html.codex-dream-skin.dream-art-wide main.dream-main-surface > header.app-header-tint svg {
   filter: drop-shadow(0 1px 2px color-mix(in oklab, var(--dream-canvas) 72%, transparent));
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface [role="main"] {
+html.codex-dream-skin.dream-art-wide main.dream-main-surface [role="main"] {
   background: transparent !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface.dream-home-shell
+html.codex-dream-skin.dream-art-wide main.dream-main-surface.dream-home-shell
   .dream-home > div:first-child > div:first-child > div:first-child {
   border: 0 !important;
   border-radius: 0 !important;
@@ -591,12 +591,12 @@ html.codex-dream-skin.dream-art-wide main.main-surface.dream-home-shell
   box-shadow: none !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface.dream-home-shell
+html.codex-dream-skin.dream-art-wide main.dream-main-surface.dream-home-shell
   .dream-home > div:first-child > div:first-child > div:first-child::before {
   content: none !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface.dream-home-shell
+html.codex-dream-skin.dream-art-wide main.dream-main-surface.dream-home-shell
   .dream-home .group\/home-suggestions button {
   background: color-mix(in oklab, var(--dream-surface-raised) 58%, transparent) !important;
   box-shadow: 0 8px 22px color-mix(in oklab, var(--dream-canvas) 18%, transparent),
@@ -641,14 +641,14 @@ html.codex-dream-skin .dream-home:has(.dream-home-utility) .composer-surface-chr
    Clear only full-window or sticky route chrome, leaving functional cards and
    their hover states intact. */
 html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
-  main.main-surface:not(.dream-home-shell) div.sticky:has(input[type="text"]),
+  main.dream-main-surface:not(.dream-home-shell) div.sticky:has(input[type="text"]),
 html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
-  main.main-surface:not(.dream-home-shell) div.sticky:has(input[type="text"])::after {
+  main.dream-main-surface:not(.dream-home-shell) div.sticky:has(input[type="text"])::after {
   background: transparent !important;
 }
 
 html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
-  main.main-surface:not(.dream-home-shell) div.no-drag:has(> input[type="text"]) {
+  main.dream-main-surface:not(.dream-home-shell) div.no-drag:has(> input[type="text"]) {
   background: var(--dream-immersive-composer) !important;
   border: 0 !important;
   box-shadow: inset 0 0 0 1px var(--dream-immersive-line) !important;
@@ -656,21 +656,21 @@ html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
 }
 
 html.codex-dream-skin.dream-art-wide:is(.dream-task-ambient, .dream-task-banner)
-  main.main-surface:not(.dream-home-shell)
+  main.dream-main-surface:not(.dream-home-shell)
   [class~="bg-token-main-surface-primary"][class~="h-full"][class~="w-full"] {
   background: transparent !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface .app-shell-main-content-frame {
+html.codex-dream-skin.dream-art-wide main.dream-main-surface .app-shell-main-content-frame {
   border-top: 0 !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface .app-shell-main-content-top-fade {
+html.codex-dream-skin.dream-art-wide main.dream-main-surface .app-shell-main-content-top-fade {
   display: none !important;
   background: transparent !important;
 }
 
-html.codex-dream-skin.dream-art-wide main.main-surface
+html.codex-dream-skin.dream-art-wide main.dream-main-surface
   .thread-scroll-container .bg-gradient-to-t.from-token-main-surface-primary {
   background: transparent !important;
 }
@@ -761,10 +761,6 @@ html.codex-dream-skin.dream-art-wide main.main-surface
 /* On narrow or very short windows, restore Codex's native home content rather
    than squeezing the fixed workbench over the composer. */
 @media (max-width: 900px), (max-height: 640px) {
-  html.codex-dream-skin .dream-government-dashboard {
-    display: none !important;
-  }
-
   html.codex-dream-skin .dream-home [data-feature="game-source"] {
     display: flex !important;
     pointer-events: auto !important;
@@ -823,6 +819,24 @@ html.codex-dream-skin .dream-home div:has([contenteditable="true"]) {
   z-index: 7 !important;
 }
 
+/* Codex 26.803 uses a new home DOM. Keep its native project picker and
+   ProseMirror composer above the fixed workbench image. */
+html.codex-dream-skin .dream-new-task form,
+html.codex-dream-skin .dream-new-task div:has(textarea),
+html.codex-dream-skin .dream-new-task div:has([contenteditable="true"]) {
+  position: relative !important;
+  z-index: 7 !important;
+}
+
 html.codex-dream-skin .dream-government-dashboard {
   z-index: 0 !important;
 }
+
+/* Keep the workbench sidebar close to the red application rail. */
+html.codex-dream-skin.codex-dream-skin.codex-dream-skin aside.app-shell-left-panel.app-shell-left-panel {
+  background: linear-gradient(180deg, #bd332b 0%, #b42b24 55%, #a92520 100%) !important;
+}
+html.codex-dream-skin.codex-dream-skin.codex-dream-skin aside.app-shell-left-panel.app-shell-left-panel::before {
+  background: transparent !important;
+}
+
